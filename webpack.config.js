@@ -22,6 +22,10 @@ module.exports = {
         test: /\.(txt|html)/,
         type: "asset/source",
       },
+      {
+        test: /\.md/,
+        type: "asset/source",
+      },
     ],
   },
   plugins: [

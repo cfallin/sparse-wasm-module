@@ -1,5 +1,15 @@
 //! Default Compute@Edge template program.
 import welcomePage from "./welcome-to-compute@edge.html";
+import markdownData from "./DESIGN.md";
+import MarkdownIt from 'markdown-it';
+
+function render() {
+    let md = MarkdownIt();
+    let temporary = new Uint8Array(4*1024*1024);
+    return md.render(markdownData);
+}
+
+const pre_rendered = render();
 
 // The entry point for your application.
 //
@@ -25,37 +35,10 @@ async function handleRequest(event) {
 
   // If request is to the `/` path...
   if (url.pathname == "/") {
-    // Below are some common patterns for Compute@Edge services using JavaScript.
-    // Head to https://developer.fastly.com/learning/compute/javascript/ to discover more.
-
-    // Create a new request.
-    // let bereq = new Request("http://example.com");
-
-    // Add request headers.
-    // req.headers.set("X-Custom-Header", "Welcome to Compute@Edge!");
-    // req.headers.set(
-    //   "X-Another-Custom-Header",
-    //   "Recommended reading: https://developer.fastly.com/learning/compute"
-    // );
-
-    // Create a cache override.
-    // let cacheOverride = new CacheOverride("override", { ttl: 60 });
-
-    // Forward the request to a backend.
-    // let beresp = await fetch(req, {
-    //   backend: "backend_name",
-    //   cacheOverride,
-    // });
-
-    // Remove response headers.
-    // beresp.headers.delete("X-Another-Custom-Header");
-
-    // Log to a Fastly endpoint.
-    // const logger = fastly.getLogger("my_endpoint");
-    // logger.log("Hello from the edge!");
+    let htmlData = render();
 
     // Send a default synthetic response.
-    return new Response(welcomePage, {
+    return new Response(htmlData, {
       status: 200,
       headers: new Headers({ "Content-Type": "text/html; charset=utf-8" }),
     });
